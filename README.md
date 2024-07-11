@@ -1,1 +1,1 @@
-A companion repository for [A Unit Testing Practitioner's Guide to Everyday Mockito](https://www.toptal.com/java/a-guide-to-everyday-mockito).
+A sample project designed to showcase the capabilities and advantages of Sapient Codeless.

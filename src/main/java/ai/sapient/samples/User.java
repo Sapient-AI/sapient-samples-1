@@ -1,16 +1,13 @@
-package demo.mockito;
+package ai.sapient.samples;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 public class User implements Comparable<User>, Serializable {
 
-    private String id;
-    private String passwordHash;
-    private boolean enabled;
-
-    public User() {
-    }
+    private final String id;
+    private final String passwordHash;
+    private final boolean enabled;
 
     public User(String id, String passwordHash, boolean enabled) {
         this.id = id;
@@ -29,31 +26,12 @@ public class User implements Comparable<User>, Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getPasswordHash() {
         return passwordHash;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String generateRandomPassword() {return "ZZ";}
-
-    @SuppressWarnings("unused")
-    protected String concatIdAndPassword() {
-        return id + passwordHash;
     }
 
     @Override

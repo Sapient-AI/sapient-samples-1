@@ -1,15 +1,14 @@
-package demo.mockito;
-
-import org.springframework.beans.factory.annotation.Autowired;
+package ai.sapient.samples;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(@Autowired(required = false) UserRepository userRepository, @Autowired(required = false) PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -24,6 +23,7 @@ public class UserService {
             return false;
         }
         if (user.isEnabled()) {
+            password = DigestUtils.md5DigestAsHex(password.getBytes());
             String encodedPassword = passwordEncoder.encode(password);
             return encodedPassword.equals(user.getPasswordHash());
         }
@@ -46,7 +46,6 @@ public class UserService {
         userRepository.update(user);
     }
 
-    @SuppressWarnings("SameReturnValue")
     public String greet() {
         return "Hello, I'm UserService";
     }
