@@ -1,0 +1,245 @@
+---
+class: "ai.sapient.samples.UserService"
+fields:
+- "PasswordEncoder passwordEncoder"
+- "UserRepository userRepository"
+imports:
+- "ai.sapient.samples.UserRepository"
+- "ai.sapient.samples.PasswordEncoder"
+- "java.lang.String"
+- "java.lang.IllegalArgumentException"
+- "ai.sapient.samples.User"
+- "ai.sapient.samples.DigestUtils"
+- "java.util.List"
+- "java.util.ArrayList"
+- "void"
+methods:
+- targetMethod: "isValidUser(String userId, String password): boolean result"
+  tests:
+  - name: "isValidUserWhenUserIdIsNullThrowsIllegalArgumentException"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userId: "NULL"
+    - password: "password1"
+    - userRepository: "MOCK"
+    - passwordEncoder: "MOCK"
+    - uniqueUuid1: "Invalid UserId"
+    - illegalArgumentException: "THROW NEW IllegalArgumentException(String uniqueUuid1)"
+    - result: "REF illegalArgumentException"
+    branches:
+    - expression: "userId == null : true"
+      lineNumber: 17
+  - name: "isValidUserWhenUserIsNull"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userId: "userId1"
+    - password: "password1"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findById(String userId): User user"
+    - user: "NULL"
+    - passwordEncoder: "MOCK"
+    - expectedResult: false
+    - result: "REF expectedResult"
+    branches:
+    - expression: "userId == null : false"
+      lineNumber: 17
+    - expression: "user == null : true"
+      lineNumber: 22
+  - name: "isValidUserWhenUserNotIsEnabled"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userId: "userId1"
+    - password: "password1"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findById(String userId): User user"
+    - user-id: "id1"
+    - user-passwordHash: "passwordHash1"
+    - user-enabled: false
+    - user: "NEW User(String user-id,String user-passwordHash,boolean user-enabled)"
+    - passwordEncoder: "MOCK"
+    - expectedResult: false
+    - result: "REF expectedResult"
+    branches:
+    - expression: "userId == null : false"
+      lineNumber: 17
+    - expression: "user == null : false"
+      lineNumber: 22
+    - expression: "user.isEnabled() : false"
+      lineNumber: 25
+  - name: "isValidUserWhenEncodedPasswordEqualsUserGetPasswordHash"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userId: "userId1"
+    - password: "A"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findById(String userId): User user"
+    - user-id: "id1"
+    - user-passwordHash: ""
+    - user-enabled: true
+    - user: "NEW User(String user-id,String user-passwordHash,boolean user-enabled)"
+    - passwordEncoder: "MOCK"
+      mock-expressions:
+      - "encode(String string): String string2"
+    - string2: ""
+    - string: ""
+    - DigestUtils.class.real: "EVAL DigestUtils.class"
+      method-calls:
+      - "md5DigestAsHex(byte[] byteArray): String string"
+    - byteArrayItem0: 0
+    - byteArray: "NEW byte[]"
+      elements:
+      - "REF byteArrayItem0"
+    - boolean2: true
+    - result: "REF boolean2"
+    branches:
+    - expression: "userId == null : false"
+      lineNumber: 17
+    - expression: "user == null : false"
+      lineNumber: 22
+    - expression: "user.isEnabled() : true"
+      lineNumber: 25
+    - expression: "encodedPassword.equals(user.getPasswordHash()) : true"
+      lineNumber: 28
+  - name: "isValidUserWhenEncodedPasswordNotEqualsUserGetPasswordHash"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userId: "userId1"
+    - password: "A"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findById(String userId): User user"
+    - user-id: "id1"
+    - user-passwordHash: "C"
+    - user-enabled: true
+    - user: "NEW User(String user-id,String user-passwordHash,boolean user-enabled)"
+    - passwordEncoder: "MOCK"
+      mock-expressions:
+      - "encode(String string): String string2"
+    - string2: ""
+    - string: ""
+    - DigestUtils.class.real: "EVAL DigestUtils.class"
+      method-calls:
+      - "md5DigestAsHex(byte[] byteArray): String string"
+    - byteArrayItem0: 0
+    - byteArray: "NEW byte[]"
+      elements:
+      - "REF byteArrayItem0"
+    - boolean2: false
+    - result: "REF boolean2"
+    branches:
+    - expression: "userId == null : false"
+      lineNumber: 17
+    - expression: "user == null : false"
+      lineNumber: 22
+    - expression: "user.isEnabled() : true"
+      lineNumber: 25
+    - expression: "encodedPassword.equals(user.getPasswordHash()) : false"
+      lineNumber: 28
+  sourceCodeSignature: "boolean isValidUser(String userId, String password)"
+- targetMethod: "findById(String id): User result"
+  tests:
+  - name: "findByIdTest"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - id: "id1"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findById(String id): User user"
+    - user: "MOCK"
+    - passwordEncoder: "MOCK"
+    - result: "REF user"
+  sourceCodeSignature: "User findById(String id)"
+- targetMethod: "findByIds(List<String> ids): List<User> result"
+  tests:
+  - name: "findByIdsTest"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - string: "idsItem1"
+    - ids: "NEW ArrayList<String>()"
+      elements:
+      - "REF string"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findById(String string): User user"
+    - user: "MOCK"
+    - passwordEncoder: "MOCK"
+    - object: "NEW List<User>()"
+      elements:
+      - "REF user"
+    - result: "REF object"
+  sourceCodeSignature: "List<User> findByIds(List<String> ids)"
+- targetMethod: "create(User user): void result"
+  tests:
+  - name: "createTest"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - user: "MOCK"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "create(User user): User user2"
+    - user2: "MOCK"
+    - passwordEncoder: "MOCK"
+    - expectedResult: "VOID"
+    - result: "REF expectedResult"
+  sourceCodeSignature: "void create(User user)"
+- targetMethod: "update(User user): void result"
+  tests:
+  - name: "updateTest"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - user: "MOCK"
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "update(User user): User user2"
+    - user2: "MOCK"
+    - passwordEncoder: "MOCK"
+    - expectedResult: "VOID"
+    - result: "REF expectedResult"
+  sourceCodeSignature: "void update(User user)"
+- targetMethod: "greet(): String result"
+  tests:
+  - name: "greetTest"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userRepository: "MOCK"
+    - passwordEncoder: "MOCK"
+    - expectedResult: "Hello, I'm UserService"
+    - result: "REF expectedResult"
+  sourceCodeSignature: "String greet()"
+- targetMethod: "findAll(): List<User> result"
+  tests:
+  - name: "findAllTest"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findAll(): List<User> list"
+    - list: "NEW List<User>()"
+      elements: []
+    - passwordEncoder: "MOCK"
+    - result: "REF list"
+  sourceCodeSignature: "List<User> findAll()"
+- targetMethod: "findAllIds(): List<String> result"
+  tests:
+  - name: "findAllIdsTest"
+    target: "NEW UserService(UserRepository userRepository,PasswordEncoder passwordEncoder)"
+    variables:
+    - userRepository: "MOCK"
+      mock-expressions:
+      - "findAll(): List<User> list"
+    - user-id: "id1"
+    - user-passwordHash: "passwordHash1"
+    - user-enabled: false
+    - user: "NEW User(String user-id,String user-passwordHash,boolean user-enabled)"
+    - list: "NEW ArrayList<User>()"
+      elements:
+      - "REF user"
+    - passwordEncoder: "MOCK"
+    - object: "NEW List<String>()"
+      elements:
+      - "REF user-id"
+    - result: "REF object"
+  sourceCodeSignature: "List<String> findAllIds()"
