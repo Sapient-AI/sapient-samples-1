@@ -1,4 +1,6 @@
 .idea
 target
 .sapient
+src/test/java
+src/test/resources
 *.iml
