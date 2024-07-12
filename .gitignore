@@ -1,5 +1,5 @@
 .idea
-target
+build
 .sapient
 src/test/java/**/*.java
 src/test/resources
