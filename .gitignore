@@ -3,4 +3,5 @@ target
 .sapient
 src/test/java/**/*.java
 src/test/resources
+.gradle
 *.iml
