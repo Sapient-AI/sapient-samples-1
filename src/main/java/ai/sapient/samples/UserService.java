@@ -23,7 +23,6 @@ public class UserService {
             return false;
         }
         if (user.isEnabled()) {
-            password = DigestUtils.md5DigestAsHex(password.getBytes());
             String encodedPassword = passwordEncoder.encode(password);
             return encodedPassword.equals(user.getPasswordHash());
         }
